@@ -44,7 +44,7 @@ options.add_argument("--disable-notifications")
 options.add_argument("--start-maximized")  # ("--kiosk") for MAC
 options.add_argument("--disable-popups")
 options.add_argument("--disable-gpu")
-
+a=False
 
 def log_msg(message):
     """Print to console and store to Log"""
@@ -153,11 +153,20 @@ class FileUpload(object):
         Upload File on Streamlit Code
         :return:
         """
-        st.info(__doc__)
-        st.markdown(STYLE, unsafe_allow_html=True)
-        file = st.file_uploader("Upload file", type=self.fileTypes)
+        # st.info(__doc__)
+        # st.markdown(STYLE, unsafe_allow_html=True)
+        st.header("Internshala Crawler")
+        global username 
+        user= st.text_input("Username of Internshala:",key="username")
+        username=user
+        global password 
+        password= st.text_input("Password of Internshala:",type="password",key="pass")
+        file = st.file_uploader("Upload file", type=self.fileTypes,key="file_uplode")
         show_file = st.empty()
-        a=st.button('Submit')
+        if st.button('Submit'):
+            global a
+            a=True
+        #print(a)
         if not file:
             show_file.info("Please upload a file of type: " + ", ".join(["csv"]))
             return
@@ -170,11 +179,11 @@ class FileUpload(object):
             df = pd.read_csv(file)
             st.dataframe(df)
 
-        return df,a
+        return df
             
 def login(df,headless = False):
-    username = "theprofessor.tle.99@gmail.com"
-    password = "naukriportal"
+    #username = "theprofessor.tle.99@gmail.com"
+    #password = "naukriportal"
     mob = "1234567890"  # Type your mobile number here
     URL = "https://internshala.com/"
     driver = webdriver.Chrome(
@@ -269,8 +278,9 @@ def login(df,headless = False):
 if __name__ ==  "__main__":
     helper = FileUpload()
     #df=pd.read_csv(r'C:\Users\Singla\Desktop\learning folder\seleneium\second_data.csv')
-    df,a=helper.run()
+    df=helper.run()
     #df=pd.read_csv(r'C:\Users\Singla\Desktop\learning folder\seleneium\second_data.csv')
+    #print(a)
     if a==True:
         login(df)
 
