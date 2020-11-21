@@ -6,29 +6,32 @@ import time
 import csv
 import pandas as pd
 from gmail import *
+from data_prepocess import *
 def scrape_main(link):
     response = requests.get(link)
     return(BeautifulSoup(response.text, 'lxml' ))
 
-st.header("Scraper")
-a=st.multiselect('Select field you want to apply for internship',('Computer Science','Marketing','Finance','Mechanical','HR','Civil','Digital Marketing','Electronics','Content Writing'),key='internship_options')
-link={'Computer Science':'https://internshala.com/internships/computer%20science-internship',
-'Marketing':'https://internshala.com/internships/marketing-internship',
-'Finance':'https://internshala.com/internships/finance-internship',
-'Mechanical':'https://internshala.com/internships/mechanical-internship',
-'HR':'https://internshala.com/internships/hr-internship',
-'Civil':'https://internshala.com/internships/civil-internship',
-'Digital Marketing':'https://internshala.com/internships/digital%20marketing-internship',
-'Electronics':'https://internshala.com/internships/electronics-internship',
-'Content Writing':'https://internshala.com/internships/content%20writing-internship'
-}
-email_to=st.text_input('Enter ur Email ID',key="emailID")
-sbtbtn=st.button('Submit')
-if sbtbtn:
+def app1():
+    st.header("Scraper")
+    a=st.multiselect('Select field you want to apply for internship',('Computer Science','Marketing','Finance','Mechanical','HR','Civil','Digital Marketing','Electronics','Content Writing'),key='internship_options')
+    link={'Computer Science':'https://internshala.com/internships/computer%20science-internship',
+    'Marketing':'https://internshala.com/internships/marketing-internship',
+    'Finance':'https://internshala.com/internships/finance-internship',
+    'Mechanical':'https://internshala.com/internships/mechanical-internship',
+    'HR':'https://internshala.com/internships/hr-internship',
+    'Civil':'https://internshala.com/internships/civil-internship',
+    'Digital Marketing':'https://internshala.com/internships/digital%20marketing-internship',
+    'Electronics':'https://internshala.com/internships/electronics-internship',
+    'Content Writing':'https://internshala.com/internships/content%20writing-internship'
+    }
+    email_to=st.text_input('Enter ur Email ID',key="emailID")
+    sbtbtn=st.button('Submit')
+    if sbtbtn:
+        extract(link,a,email_to)
+def extract(link,a,email_to):
     links=[]
     for i in a:
         links.append(link[i])
-
     row_heading = ['source', 'job_link']
     file_name = 'internshala_first_data.csv' 
     file = open(file_name,'w')
@@ -86,4 +89,5 @@ if sbtbtn:
         description = soup.find('div',{'class':'internship_details'}).get_text().strip()
         writer.writerow([df.source[index], loc, df.job_link[index],job_title,company_name, imp_fields,description_headings, description,skills,perks])
     file.close()
-    mail(email_to,file_name)
+    cleaning(file_name)
+    mail(email_to,"result1.csv")
