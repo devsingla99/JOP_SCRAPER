@@ -275,7 +275,8 @@ def login(df,headless = False):
     df.to_csv("result1.csv")
     for i in lt:
         print(i)
-if __name__ ==  "__main__":
+# if __name__ ==  "__main__":
+def app1():
     helper = FileUpload()
     #df=pd.read_csv(r'C:\Users\Singla\Desktop\learning folder\seleneium\second_data.csv')
     df=helper.run()
